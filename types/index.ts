@@ -15,7 +15,7 @@ export interface IReachQuery {
   [key: string]: any;
 }
 
-export interface ReachOpts extends Pick<RequestInit, 'mode' | 'credentials' | 'method'> {
+export interface IReachOptions extends Pick<RequestInit, 'mode' | 'credentials' | 'method'> {
   type?: ReachContentTypes;
   noJson?: boolean;
   auth?: boolean;

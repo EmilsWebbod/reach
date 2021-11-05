@@ -10,6 +10,7 @@ lib/
 .nyc_output
 .env
 *.js
-*.map.js
+*.d.ts
 
 yarn-error.log
+tsconfig.tsbuildinfo

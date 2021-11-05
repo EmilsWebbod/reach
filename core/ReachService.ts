@@ -1,9 +1,9 @@
 import { getCookieValue } from '../utils';
-import {ReachOpts} from '../types';
+import {IReachOptions} from '../types';
 
 interface ReachServiceOptions {
   csrf?: { cookie: string; };
-  options?: Partial<ReachOpts>;
+  options?: Partial<IReachOptions>;
   headers?: Headers;
   logout?: (response: Response) => void;
 }
@@ -23,7 +23,7 @@ export class ReachService {
     return this.opts.headers || new Headers();
   }
 
-  public options(): Partial<ReachOpts> {
+  public options(): Partial<IReachOptions> {
     return this.opts.options || {};
   }
 

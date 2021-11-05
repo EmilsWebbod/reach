@@ -1,13 +1,13 @@
-import {IReachBody, ReachOpts} from '../types';
+import {IReachBody, IReachOptions} from '../types';
 
 export class ReachBody {
 
-  static get(opts: ReachOpts): FormData | string | undefined {
+  static get(opts: IReachOptions): FormData | string | undefined {
     opts.body = opts.body ? { ...opts.body } : {};
     return Object.keys(opts.body).length > 0 ? ReachBody.parse(opts) : undefined;
   }
 
-  static parse(opts: ReachOpts) {
+  static parse(opts: IReachOptions) {
     const contentType = opts.type ? opts.type : 'application/json';
     const body = { ...opts.body } as ReachBody;
 

@@ -1,15 +1,18 @@
 import {ReachBody} from './ReachBody';
 import {ReachService} from './ReachService';
-import {ReachOpts} from '../types';
+import {IReachOptions} from '../types';
 
 export class Reach {
+
+  private busy = false;
 
   constructor(private reachService: ReachService) {
   }
 
-  async api<T = object>(path: string, optsOverride?: ReachOpts): Promise<T> {
+  async api<T = object>(path: string, optsOverride?: IReachOptions): Promise<T> {
     try {
-      const opts: ReachOpts = {
+      this.busy = true;
+      const opts: IReachOptions = {
         method: 'GET',
         ...this.reachService.options(),
         ...(optsOverride || {}),
@@ -42,11 +45,13 @@ export class Reach {
       return data;
     } catch (e) {
       throw e;
+    } finally {
+      this.busy = false;
     }
   }
 
-  private url(path: string, opts: ReachOpts) {
-    let url = opts.usePathAsUrl ? '' : this.reachService.url;
+  private url(path: string, opts: IReachOptions) {
+    let url = opts.usePathAsUrl ? '' : this.reachService.url();
     url += path ? `/${path}` : '';
     let params = '';
 
@@ -57,7 +62,7 @@ export class Reach {
     return `${url}${params}`;
   }
 
-  private headers(opts: ReachOpts) {
+  private headers(opts: IReachOptions) {
     const headers = this.combineHeaders(opts.headers);
     const csrfCookie = this.reachService.getCSRFHeaderToken();
     if (csrfCookie) headers.append(...csrfCookie);
