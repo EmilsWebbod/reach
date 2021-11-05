@@ -1,0 +1,54 @@
+{
+  "name": "@ewb/reach",
+  "version": "0.0.1",
+  "description": "Resource and Fetch stuff",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "start": "yarn build:watch",
+    "build": "tsc --incremental",
+    "build:watch": "tsc --watch --incremental",
+    "lint": "tslint --project \"./tsconfig.json\"",
+    "test": "mocha --watch --watch-extensions ts -r ts-node/register test/**/*.spec.ts",
+    "test:active": "yarn test --watch -g active:",
+    "storybook": "start-storybook -p 9009 -s public",
+    "postversion": "git push && git push --tags",
+    "prepublish": "npm run build",
+    "preversion": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmilsWebbod/reach.git"
+  },
+  "keywords": [
+    "typescript",
+    "ts",
+    "reach",
+    "fetch",
+    "crud",
+    "api"
+  ],
+  "author": "Ludens reklamebyrå",
+  "bugs": {
+    "url": "https://github.com/EmilsWebbod/reach/issues"
+  },
+  "homepage": "https://github.com/EmilsWebbod/reach#readme",
+  "files": [
+    "types",
+    "utils",
+    "index",
+    "core"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "prettier": "^2.0.4",
+    "pretty-quick": "^2.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^4.2.4"
+  }
+}
