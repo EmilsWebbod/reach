@@ -34,15 +34,15 @@ export class Reach {
 
       if (response.status < 300) {
         data = opts.noJson ? response : await response.json();
-      } else {
-        throw response.clone();
+      } else if(response.status >= 400) {
+        await this.error(response);
       }
 
       if (!data) {
-        throw response.clone();
+        await this.error(response);
       }
 
-      return data;
+      return data as T;
     } catch (e) {
       throw e;
     } finally {
@@ -95,5 +95,17 @@ export class Reach {
     }
 
     return _headers;
+  }
+
+  private async error(res: Response) {
+    console.error('Response error:', res);
+    let json;
+    try {
+      json = await res.json();
+    } catch (e) {
+      console.error('Parse error', e);
+      throw new Error(`Failed to parse error ${res.status}-${res.statusText}`);;
+    }
+    throw json;
   }
 }
