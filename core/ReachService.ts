@@ -15,7 +15,7 @@ export class ReachService {
 
   }
 
-  public url() {
+  get url() {
     return this._url;
   }
 
