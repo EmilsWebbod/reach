@@ -17,6 +17,7 @@ export class Reach {
         ...this.reachService.options(),
         ...(optsOverride || {}),
       };
+      console.log(opts)
 
       const url = this.url(path, opts);
       const headers = this.headers(opts);
@@ -66,6 +67,10 @@ export class Reach {
     const headers = this.combineHeaders(opts.headers);
     const csrfCookie = this.reachService.getCSRFHeaderToken();
     if (csrfCookie) headers.append(...csrfCookie);
+
+    if (opts.bearerToken) {
+      headers.append('Authorization', `Bearer ${opts.bearerToken}`);
+    }
 
     switch (opts.type) {
       case 'multipart/form-data':

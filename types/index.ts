@@ -24,4 +24,5 @@ export interface IReachOptions extends Pick<RequestInit, 'mode' | 'credentials' 
   query?: IReachQuery;
   headers?: IReachHeaders;
   usePathAsUrl?: boolean;
+  bearerToken?: string;
 }
