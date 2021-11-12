@@ -72,6 +72,10 @@ export class Reach {
       headers.append('Authorization', `Bearer ${opts.bearerToken}`);
     }
 
+    if (this.reachService.socketIds) {
+      headers.append('X-WebSocket-Id', this.reachService.socketIds.join(' '));
+    }
+
     switch (opts.type) {
       case 'multipart/form-data':
         break;

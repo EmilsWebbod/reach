@@ -9,10 +9,14 @@ interface ReachServiceOptions {
 }
 
 export class ReachService {
-  public refreshingToken: boolean = false;
+  private _socketIds: Set<string> = new Set();
 
   constructor(private _url: string, private opts: ReachServiceOptions) {
 
+  }
+
+  get socketIds(): string[] {
+    return [...this._socketIds];
   }
 
   get url() {
@@ -37,5 +41,13 @@ export class ReachService {
 
   public logout(response: Response) {
     if (this.opts.logout) this.opts.logout(response);
+  }
+
+  public addSocket(id: string) {
+    this._socketIds.add(id);
+  }
+
+  public deleteSocket(id: string) {
+    this._socketIds.delete(id);
   }
 }
