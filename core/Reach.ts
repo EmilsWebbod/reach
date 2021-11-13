@@ -17,7 +17,6 @@ export class Reach {
         ...this.reachService.options(),
         ...(optsOverride || {}),
       };
-      console.log(opts)
 
       const url = this.url(path, opts);
       const headers = this.headers(opts);
