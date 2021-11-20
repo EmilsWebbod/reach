@@ -1,6 +1,6 @@
 {
   "name": "@ewb/reach",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Resource and Fetch stuff",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -36,7 +36,7 @@
   "files": [
     "types",
     "utils",
-    "index",
+    "index.ts",
     "core"
   ],
   "husky": {
