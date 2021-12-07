@@ -1,6 +1,6 @@
 import {ReachBody} from './ReachBody';
 import {ReachService} from './ReachService';
-import {IReachOptions} from '../types';
+import {IReachOptions, IReachOptionsLogoutOptions} from '../types';
 
 export class Reach {
 
@@ -35,7 +35,7 @@ export class Reach {
       if (response.status < 300) {
         data = opts.noJson ? response : await response.json();
       } else if(response.status >= 400) {
-        await this.error(response);
+        await this.error(response, opts.logoutOptions);
       }
 
       if (!data) {
@@ -105,14 +105,18 @@ export class Reach {
     return _headers;
   }
 
-  private async error(res: Response) {
+  private async error(res: Response, logoutOpts?: IReachOptionsLogoutOptions) {
     console.error('Response error:', res);
+    if (logoutOpts && res.status === logoutOpts.status) {
+      this.reachService.logout(res.clone());
+    }
+
     let json;
     try {
       json = await res.json();
     } catch (e) {
       console.error('Parse error', e);
-      throw new Error(`Failed to parse error ${res.status}-${res.statusText}`);;
+      throw new Error(`Failed to parse error ${res.status}-${res.statusText}`);
     }
     throw json;
   }

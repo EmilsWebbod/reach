@@ -25,4 +25,9 @@ export interface IReachOptions extends Pick<RequestInit, 'mode' | 'credentials' 
   headers?: IReachHeaders;
   usePathAsUrl?: boolean;
   bearerToken?: string;
+  logoutOptions?: IReachOptionsLogoutOptions;
+}
+
+export interface IReachOptionsLogoutOptions {
+  status: number;
 }

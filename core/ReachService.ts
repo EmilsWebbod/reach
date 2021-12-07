@@ -10,9 +10,10 @@ interface ReachServiceOptions {
 
 export class ReachService {
   private _socketIds: Set<string> = new Set();
+  private _onLogout: ReachServiceOptions['logout'];
 
   constructor(private _url: string, private opts: ReachServiceOptions) {
-
+    this._onLogout = opts.logout;
   }
 
   get socketIds(): string[] {
@@ -21,6 +22,10 @@ export class ReachService {
 
   get url() {
     return this._url;
+  }
+
+  set onLogout(fn: ReachServiceOptions['logout']) {
+    this._onLogout = fn;
   }
 
   public headers(): Headers {
@@ -40,7 +45,7 @@ export class ReachService {
   }
 
   public logout(response: Response) {
-    if (this.opts.logout) this.opts.logout(response);
+    if (this._onLogout) this._onLogout(response);
   }
 
   public addSocket(id: string) {
