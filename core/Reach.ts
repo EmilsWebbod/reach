@@ -32,6 +32,10 @@ export class Reach {
 
       let data: T | null = null;
 
+      if (response.status === 204) {
+        return data as any;
+      }
+
       if (response.status < 300) {
         data = opts.noJson ? response : await response.json();
       } else if(response.status >= 400) {
