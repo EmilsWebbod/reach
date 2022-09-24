@@ -1,18 +1,18 @@
 import { getCookieValue } from '../utils';
-import {IReachOptions} from '../types';
+import { IReachOptions } from '../types';
 
-interface ReachServiceOptions {
-  csrf?: { cookie: string; };
+export interface IReachApiOptions {
+  csrf?: { cookie: string };
   options?: Partial<IReachOptions>;
   headers?: Headers;
   logout?: (response: Response) => void;
 }
 
-export class ReachService {
+export class ReachApi {
   private _socketIds: Set<string> = new Set();
-  private _onLogout: ReachServiceOptions['logout'];
+  private _onLogout: IReachApiOptions['logout'];
 
-  constructor(private _url: string, private opts: ReachServiceOptions) {
+  constructor(readonly url: string, private opts: IReachApiOptions) {
     this._onLogout = opts.logout;
   }
 
@@ -20,11 +20,7 @@ export class ReachService {
     return [...this._socketIds];
   }
 
-  get url() {
-    return this._url;
-  }
-
-  set onLogout(fn: ReachServiceOptions['logout']) {
+  set onLogout(fn: IReachApiOptions['logout']) {
     this._onLogout = fn;
   }
 

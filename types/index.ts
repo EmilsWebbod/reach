@@ -3,19 +3,12 @@ export type ReachContentTypes =
   | 'multipart/form-data'
   | 'application/x-www-form-urlencoded';
 
-export interface IReachBody {
-  [key: string]: any;
-}
+export type IReachBody = Record<string | number, any>;
+export type IReachHeaders = Record<string, string>;
+export type IReachQuery = Record<string, string>;
 
-export interface IReachHeaders {
-  [key: string]: any;
-}
-
-export interface IReachQuery {
-  [key: string]: any;
-}
-
-export interface IReachOptions extends Pick<RequestInit, 'mode' | 'credentials' | 'method'> {
+export interface IReachOptions
+  extends Pick<RequestInit, 'mode' | 'credentials' | 'method'> {
   type?: ReachContentTypes;
   noJson?: boolean;
   auth?: boolean;

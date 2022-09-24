@@ -1,15 +1,67 @@
-import {ReachBody} from './ReachBody';
-import {ReachService} from './ReachService';
-import {IReachOptions, IReachOptionsLogoutOptions} from '../types';
+import {
+  IReachHeaders,
+  IReachOptions,
+  IReachOptionsLogoutOptions,
+} from '../types';
+import { ReachBody } from './ReachBody';
+import { ReachApi } from './ReachApi';
+import { ReachError } from './ReachError';
 
 export class Reach {
-
   private busy = false;
 
-  constructor(private reachService: ReachService) {
+  constructor(private reachService: ReachApi) {}
+
+  async get<T = object>(
+    path: string,
+    optsOverride: Omit<IReachOptions, 'method' | 'body'> = {}
+  ): Promise<T> {
+    return this.api(path, {
+      ...optsOverride,
+      method: 'GET',
+    });
+  }
+  async post<T = object>(
+    path: string,
+    optsOverride: Omit<IReachOptions, 'method'> = {}
+  ): Promise<T> {
+    return this.api(path, {
+      ...optsOverride,
+      method: 'POST',
+    });
+  }
+  async patch<T = object>(
+    path: string,
+    optsOverride: Omit<IReachOptions, 'method'> = {}
+  ): Promise<T> {
+    return this.api(path, {
+      ...optsOverride,
+      method: 'PATCH',
+    });
+  }
+  async put<T = object>(
+    path: string,
+    optsOverride: Omit<IReachOptions, 'method'> = {}
+  ): Promise<T> {
+    return this.api(path, {
+      ...optsOverride,
+      method: 'PUT',
+    });
+  }
+  async delete<T = object>(
+    path: string,
+    optsOverride: Omit<IReachOptions, 'method'> = {}
+  ): Promise<T> {
+    return this.api(path, {
+      ...optsOverride,
+      method: 'DELETE',
+    });
   }
 
-  async api<T = object>(path: string, optsOverride?: IReachOptions): Promise<T> {
+  async api<T = object>(
+    path: string,
+    optsOverride?: IReachOptions
+  ): Promise<T> {
     try {
       this.busy = true;
       const opts: IReachOptions = {
@@ -21,24 +73,24 @@ export class Reach {
       const url = this.url(path, opts);
       const headers = this.headers(opts);
       const body = ReachBody.get(opts);
-
-      const response = await fetch(url, {
+      const init = {
         method: opts.method,
         headers,
         body,
         mode: opts.mode,
         credentials: opts.credentials,
-      });
+      };
+
+      const response = await fetch(url, init);
 
       let data: T | null = null;
-
       if (response.status === 204) {
         return data as any;
       }
 
       if (response.status < 300) {
         data = opts.noJson ? response : await response.json();
-      } else if(response.status >= 400) {
+      } else if (response.status >= 400) {
         await this.error(response, opts.logoutOptions);
       }
 
@@ -95,7 +147,7 @@ export class Reach {
     return headers;
   }
 
-  private combineHeaders(headers?: { [key: string]: string }) {
+  private combineHeaders(headers?: IReachHeaders) {
     const _headers = new Headers(this.reachService.headers());
 
     if (!headers) {
@@ -115,13 +167,6 @@ export class Reach {
       this.reachService.logout(res.clone());
     }
 
-    let json;
-    try {
-      json = await res.json();
-    } catch (e) {
-      console.error('Parse error', e);
-      throw new Error(`Failed to parse error ${res.status}-${res.statusText}`);
-    }
-    throw json;
+    throw new ReachError(res.clone(), res.status, res.statusText);
   }
 }
