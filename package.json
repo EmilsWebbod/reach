@@ -1,6 +1,6 @@
 {
   "name": "@ewb/reach",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Resource and Fetch stuff",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -33,14 +33,6 @@
     "url": "https://github.com/EmilsWebbod/reach/issues"
   },
   "homepage": "https://github.com/EmilsWebbod/reach#readme",
-  "files": [
-    "types",
-    "utils",
-    "index.ts",
-    "index.d.ts",
-    "index.js",
-    "core"
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
