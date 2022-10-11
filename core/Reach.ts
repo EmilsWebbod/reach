@@ -1,13 +1,12 @@
-import {ReachBody} from './ReachBody';
-import {ReachService} from './ReachService';
-import {IReachOptions, IReachOptionsLogoutOptions} from '../types';
+import { ReachBody } from './ReachBody';
+import { ReachError } from './ReachError.js';
+import { ReachService } from './ReachService';
+import { IReachOptions, IReachOptionsLogoutOptions } from '../types';
 
 export class Reach {
-
   private busy = false;
 
-  constructor(private reachService: ReachService) {
-  }
+  constructor(private reachService: ReachService) {}
 
   async api<T = object>(path: string, optsOverride?: IReachOptions): Promise<T> {
     try {
@@ -38,7 +37,7 @@ export class Reach {
 
       if (response.status < 300) {
         data = opts.noJson ? response : await response.json();
-      } else if(response.status >= 400) {
+      } else if (response.status >= 400) {
         await this.error(response, opts.logoutOptions);
       }
 
@@ -115,13 +114,6 @@ export class Reach {
       this.reachService.logout(res.clone());
     }
 
-    let json;
-    try {
-      json = await res.json();
-    } catch (e) {
-      console.error('Parse error', e);
-      throw new Error(`Failed to parse error ${res.status}-${res.statusText}`);
-    }
-    throw json;
+    throw new ReachError(res);
   }
 }
