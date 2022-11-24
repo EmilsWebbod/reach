@@ -114,6 +114,11 @@ export class Reach {
       this.reachService.logout(res.clone());
     }
 
-    throw new ReachError(res);
+    if (res.headers.get('Content-Type') === 'application/json' && !res.bodyUsed) {
+      const json = await res.json();
+      throw new ReachError(res, json);
+    } else {
+      throw new ReachError(res);
+    }
   }
 }
