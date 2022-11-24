@@ -1,4 +1,4 @@
-export class ReachError<T> extends Error {
+export class ReachError<T = any> extends Error {
   public status: number;
 
   constructor(public response: Response, public body?: T) {
