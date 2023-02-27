@@ -54,8 +54,10 @@ export class Reach {
   }
 
   private url(path: string, opts: IReachOptions) {
-    let url = opts.usePathAsUrl ? '' : this.reachService.url;
-    url += path ? `/${path}` : '';
+    let url = opts.usePathAsUrl ? path : this.reachService.url;
+    if (!opts.usePathAsUrl) {
+      url += path ? `/${path}` : '';
+    }
     let params = '';
 
     if (opts.query) {
